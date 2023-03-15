@@ -38,17 +38,35 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    const born = inventors.filter(inventor => inventor.year >= 1500 && inventor.year < 1600);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    const firstLast = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
+
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const bday = inventors.sort(function(a, b){
+      return a.year - b.year;
+    })
+
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    const total = inventors.reduce(function(prev, cur) {
+      return prev + cur.passed - cur.year;
+    }, 0)
+    
+
 
     // 5. Sort the inventors by years lived
+    const sortByAge = inventors.sort(function(a, b){
+      const ageA = a.passed - a.year;
+      const ageB = b.passed - b.year;
+      return ageA - ageB;
+    })
+    console.log(sortByAge);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
@@ -56,10 +74,28 @@
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const sortByName = people.sort(function(a, b){
+      const [firstNamea, lastNamea] = a.split(',');
+      const [firstNameb, lastNameb] = b.split(',');
+      if (lastNamea < lastNameb) {
+        return -1;
+      } else if (lastNamea > lastNameb) {
+        return 1;
+      }
+    })
+    console.table(sortByName)
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const sumIns = data.reduce(function(total, cur) {
+      if (!total[cur]) {
+        total[cur] = 0;
+      }
+      total[cur] += 1;
+      return total;
+    }, {})
+    console.table(sumIns);
 
   </script>
 </body>

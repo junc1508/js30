@@ -78,4 +78,22 @@ h2 {
   padding: 10px;
   outline: 0;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
+
+.add-items input[type=button] {
+  margin: 5px;
+  font-weight: 700;
+}
+
+.add-items input[name=delete] {
+  background-color:#BC0000;
+  color: white;
+}
+
+.add-items input[name=uncheckAll] {
+  background-color: #828D00;
+  color: white;
+}
+
+

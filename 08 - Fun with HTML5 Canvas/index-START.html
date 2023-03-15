@@ -8,6 +8,73 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+  const canvas = document.querySelector('#draw');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
+  // make sure we only draw when cursor is down
+  //click down = true; click up = false
+  let isDraw = false;
+
+  //we need a start and stop to draw a line
+  //lastX and lastY gives the start.
+  let lastX = 0;
+  let lastY = 0;
+  let hue = 0;
+  //buid up when true
+  let direction = true;
+
+  //draw function will be called when we move the mouse
+  //anything that will change goes here like linewide, strokeStyle.
+  function draw(e) {
+    //stop draw from running when no mouse down
+    if(!isDraw) {
+      return;
+    }
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.beginPath();
+    ctx.moveTo(lastX,lastY);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    //update last coordinate with mousemove offset
+    //so we can draw a line continuously instead of 
+    //from drawing all lines from (0, 0)
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+    hue++;
+
+    if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+      direction = !direction;
+    }
+    if (direction) {
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
+    }
+  }
+
+  //listen to mousemove event on canvas
+  //listen to mousedown
+  //as soon as mousedown, before mosemove, 
+  //update lastX, lastY
+  canvas.addEventListener('mousedown', (e)=> {
+    isDraw = true;
+    //when we are starting a new line, the
+    //start point should be the first mousedown point
+    //instead of (0, 0)
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', ()=> isDraw = false);
+  canvas.addEventListener('mouseout', ()=> isDraw = false);
+
+
+
+
+
 </script>
 
 <style>

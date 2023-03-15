@@ -91,12 +91,40 @@
       <p>Good Luck!</p>
     </div>
     <div class="item">
-      <input type="checkbox">
+      <input type="checkbox" class="test">
       <p>Don't forget to tweet your result!</p>
     </div>
   </div>
 
 <script>
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+  const test = document.querySelector('.test');
+  //store the last checked, need to be independent of the handleClick method
+  let lastChecked;
+  function handleClick(e){
+    let inBetween = false;
+        //check if they have shifkey down and checked (not unchecked)
+        //if so loop through all checkbox to look for the lastcheck
+        //to check everything between last and this
+    if (e.shiftKey && this.checked) {
+      checkboxes.forEach(checkbox => {
+        //the relative position of this and lastChecked does not affect inbetween.
+        //check 1 then check 5 is the same as check 5 then check 1
+        if (checkbox === this || checkbox === lastChecked) {
+          inBetween = !inBetween;
+        }
+        if (inBetween) {
+          checkbox.checked = true;
+        }
+      });
+    }
+    //if click checks this, not unchecks, update last checked to this
+    if (this.checked) {
+      lastChecked = this;
+    }
+  }
+    
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleClick));
 </script>
 </body>
 </html>

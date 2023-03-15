@@ -9,7 +9,9 @@
 
 
     <div class="clock">
+      <!-- the circle face -->
       <div class="clock-face">
+        <!-- stacks on each other -->
         <div class="hand hour-hand"></div>
         <div class="hand min-hand"></div>
         <div class="hand second-hand"></div>
@@ -54,7 +56,7 @@
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      transform: translateY(-3px); /* account for the height of the clock hands, makes it shorter and ends at the center */
     }
 
     .hand {
@@ -63,12 +65,44 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform: rotate(90deg);
+      transform-origin: 100%;
+      transition: all 0.03s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
-
   </style>
+  
 
   <script>
+    // select the second hand
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+    //function to set the clock hand to the right place.
+    function setDate() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const munites = now.getMinutes();
+      const hours = now.getHours();
+      
+      // get the current degree, we start at 90 since div starts from left to right
+      //we want to start from pointing up
+      const secondsDegrees = (seconds/60)*360 + 90;
+      const minutesDegrees = (munites/60)*360 + (seconds/60)*6 + 90;
+      //12 hours is 360deg
+      const hoursDegrees = (hours/12)*360 + (munites/60)*30 + 90;
 
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+      minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+      hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+      
+  }
+
+  setInterval(setDate, 1000);
+  // call the function so the html load with the right clock face
+  //without this, the html load with all hands 90deg
+  //and 1 sec later it will perform setInterval and become the right date
+  setDate();
 
   </script>
 </body>

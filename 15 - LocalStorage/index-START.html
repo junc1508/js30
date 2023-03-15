@@ -23,14 +23,114 @@
     <form class="add-items">
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
+      <input type="button" name="delete" value="Delete All">
+      <input type="button" name="uncheckAll" value="Uncheck All">
+      <input type="button" name="checkAll" value="Check All">
     </form>
   </div>
 
 <script>
+  //form
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const buttons = document.querySelectorAll('input[type=button]');
+  //get items from local storage 
+  //or if no previous addition, start default with empty array
+  const items =JSON.parse(localStorage.getItem('items')) || [];
 
+  //function for form submit event
+  //adds form from submit value
+  function addItem(e) {
+    //prevent form from submitting to external 
+    e.preventDefault();
+    //if we have multiple forms
+    //we are only doing querySelector for this form
+    //with name attribute (selector []) = item to find the text input
+    //the value of text input is the text
+    const text = (this.querySelector('[name=item]')).value;
+    const item = {
+      text,
+      //default not checked
+      done: false
+    };
+    //
+    items.push(item);
+    //every time add an item, it creates a new list
+    populateList(items, itemsList);
+    //save to local storage with key, value which must be string
+    localStorage.setItem('items', JSON.stringify(items));
+    //form.reset clears previous input after submission
+    this.reset();
+  }
+
+  //create the actual HTML
+  //needs a list of items - plates - items - default empty list
+  //place to put the HTML - platesList - itemsList 
+  //map returns an array of string
+  //needs to be joined to a big string for innerHTML
+  function populateList(plates = [], platesList){
+    //if = replaced by, if += means append
+    platesList.innerHTML = plates.map((plate, i) => {
+      return `
+      <li>
+        <input type='checkbox' data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
+         <label for="item${i}">${plate.text}</label>
+      </li>
+      `;
+    }).join('');
+  }
+
+  //toggle function when click the checkbox
+  function toggleDone(e) {
+    //skip if not input
+    if (!e.target.matches('input')) return;
+    //get index
+    const el = e.target;
+    const index = el.dataset.index;
+    //toggle between true and false, update state
+    items[index].done = !items[index].done;
+    //update local storage 
+    localStorage.setItem('items', JSON.stringify(items));
+    //reload list
+    populateList(items, itemsList)
+  }
+
+  //delete all current entries from local storage
+  function buttonFunction(e){
+
+    //delete all
+    if (e.target.name==='delete') {
+      console.log('del')
+      items.length =0;
+    }
+    //uncheck all, update item
+    if (e.target.name==='uncheckAll') {
+      items.forEach(item => {
+        item.done = false;
+      })
+    }
+    if (e.target.name==='checkAll') {
+      items.forEach(item => {
+        item.done = true;
+      })
+    }
+    //update local storage
+    localStorage.setItem('items', JSON.stringify(items));
+    //reload list
+    populateList(items, itemsList);
+  }
+
+
+  //listen to submit event for form
+  addItems.addEventListener('submit', addItem);
+  //event delegation on ul for li to save check status to local storage
+  itemsList.addEventListener('click', toggleDone);
+  //click button to delete, uncheck or check all
+  buttons.forEach(button => {
+    button.addEventListener('click', buttonFunction)});
+
+  //on page load, load the previously saved items or default page
+  populateList(items, itemsList);
 </script>
 
 

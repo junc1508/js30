@@ -59,6 +59,33 @@
       };
     }
 
+
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide(e) {
+      //loop over each slide, do bunch of maps 
+      //to see whether it is on page.
+      sliderImages.forEach(sliderImage => {
+        //halfway through the image
+        const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height/2;
+
+        //Y of bottom of the image
+        const imageBottom = sliderImage.offsetTop + sliderImage.height;
+        //flag: reaches img half shown => after or shown sliderImage
+        const isHalfShow = slideInAt > sliderImage.offsetTop;
+        //flag: not scrolled past the sliderImage => before or shown
+        //false: scrolled past: sliderImage hidden again
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        if (isHalfShow && isNotScrolledPast) {
+          sliderImage.classList.add('active');
+        } else {
+          sliderImage.classList.remove('active');
+        }
+      })
+    }
+
+    window.addEventListener('scroll', debounce(checkSlide));
+
   </script>
 
   <style>

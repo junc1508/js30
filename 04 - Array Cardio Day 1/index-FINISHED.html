@@ -47,6 +47,11 @@
     const fullNames = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
     console.log(fullNames);
 
+    // or 
+    // const fullNames = inventors.map(function(inventor){
+    // return { first: inventor.first, last: inventor.last };
+    // });
+
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
     // const ordered = inventors.sort(function(a, b) {
@@ -59,6 +64,9 @@
 
     const ordered = inventors.sort((a, b) => a.year > b.year ? 1 : -1);
     console.table(ordered);
+    // const bday = inventors.sort(function(a, b){
+    //   return a.year - b.year;
+    // })
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
@@ -78,9 +86,17 @@
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+    //use the code for the above webpage
 
+    //inspect the webpage and find the element that contains the list, which is class='mw-category'
     // const category = document.querySelector('.mw-category');
+
+    // look for links inside the category
+    // links is NodeList, no map method, only forEach; so need to convert to Array; 
     // const links = Array.from(category.querySelectorAll('a'));
+    // or we can do 
+    // const links = [...category.querySelectorAll('a')];
+    
     // const de = links
     //             .map(link => link.textContent)
     //             .filter(streetName => streetName.includes('de'));

@@ -10,6 +10,7 @@
 
   <div class="controls">
     <label for="spacing">Spacing:</label>
+    <!-- data-sizing attribute to help with the css variable -->
     <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
 
     <label for="blur">Blur:</label>
@@ -22,6 +23,25 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    :root {
+      /* default values for the variables */
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img {
+      /* use the variable in the CSS with var() */
+      padding: var(--spacing);
+      background-color: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    /* highlight */
+    .hl {
+      color: var(--base);
+    }
+
 
     /*
       misc styles, nothing to do with CSS variables
@@ -46,6 +66,22 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('.controls input');
+
+    function handleUpdate() {
+      // this is the input element with mouse move;
+      // some has no data-sizing attribute, so defines as nothing
+      const suffix = this.dataset.sizing || '';
+      //update CSS variable
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+
+    }
+
+    // listen for change event on each of the input
+    //need both change (for color) and mousemove (for blur and spacing)
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
   </script>
 
 </body>

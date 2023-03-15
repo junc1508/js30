@@ -1,3 +1,8 @@
+:root {
+  --height: 710px;
+  --width: 1500px;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -31,6 +36,12 @@ body {
 .player:fullscreen {
   max-width: none;
   width: 100%;
+}
+
+.player.wideScreen {
+  max-width: none;
+  width: var(--width);
+  height: var(--height);
 }
 
 .player:-webkit-full-screen {
@@ -68,12 +79,14 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
+  /* default: hide all; show 5px */
   transform: translateY(100%) translateY(-5px);
   transition: all .3s;
   flex-wrap: wrap;
   background: rgba(0,0,0,0.1);
 }
 
+/* when hover, show */
 .player:hover .player__controls {
   transform: translateY(0);
 }
